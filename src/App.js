@@ -4,7 +4,7 @@ import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { prefixer } from "stylis";
-import AppRoutes from "./routes/app.routes";
+import AppRouter from "./routes";
 
 const theme = createTheme({
   direction: "rtl",
@@ -19,7 +19,7 @@ function App(props) {
   return (
     <CacheProvider value={cacheRtl}>
       <ThemeProvider theme={theme}>
-        <AppRoutes />
+        <AppRouter />
       </ThemeProvider>
     </CacheProvider>
   );
