@@ -1,28 +1,13 @@
-import * as React from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-import { prefixer } from "stylis";
 import AppRouter from "./routes";
-
-const theme = createTheme({
-  direction: "rtl",
-});
-
-// Create rtl cache
-const cacheRtl = createCache({
-  key: "muirtl",
-  stylisPlugins: [prefixer, rtlPlugin],
-});
-function App(props) {
+import MaterialTheme from "./materialTheme";
+import { Provider } from "react-redux";
+import { store } from "./redux/features/store";
+export default function App() {
   return (
-    <CacheProvider value={cacheRtl}>
-      <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <MaterialTheme>
         <AppRouter />
-      </ThemeProvider>
-    </CacheProvider>
+      </MaterialTheme>
+    </Provider>
   );
 }
-
-export default App;
