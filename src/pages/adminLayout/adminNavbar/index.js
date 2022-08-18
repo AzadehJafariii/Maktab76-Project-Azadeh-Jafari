@@ -21,7 +21,7 @@ export default function AdminNavbar() {
               variant="h4"
               sx={{
                 fontFamily: "Titr",
-                fontSize: "30px",
+                fontSize: "25px",
                 fontWeight: "bold",
                 color: "#81d4fa",
               }}
@@ -49,7 +49,7 @@ export default function AdminNavbar() {
               </Typography>
             </Link>
             <Link
-              href="/admin/stocksAndPrice"
+              href="/admin/stockAndPrice"
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -67,7 +67,7 @@ export default function AdminNavbar() {
               </Typography>
             </Link>
             <Link
-              href="/admin/"
+              href="/admin/orders"
               sx={{
                 display: "flex",
                 alignItems: "center",

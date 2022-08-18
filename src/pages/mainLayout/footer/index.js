@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Box, Typography, Link } from "@mui/material";
-import aks1 from "../assets/images/footer.jpg";
-import aks2 from "../assets/images/Bsigns.png";
+import aks1 from "../../../assets/images/footer/footer.jpg";
+import aks2 from "../../../assets/images/footer/Bsigns.png";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";

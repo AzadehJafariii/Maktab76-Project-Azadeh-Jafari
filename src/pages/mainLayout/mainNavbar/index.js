@@ -10,7 +10,7 @@ import BedroomBabyIcon from "@mui/icons-material/BedroomBaby";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import StrollerIcon from "@mui/icons-material/Stroller";
 import CribIcon from "@mui/icons-material/Crib";
-import logo from "../../assets/images/Bear.png";
+import logo from "../../../assets/images/logo/Bear.png";
 
 export default function MainNavbar() {
   return (

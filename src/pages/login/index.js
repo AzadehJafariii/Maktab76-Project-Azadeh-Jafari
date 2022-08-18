@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField, Typography, Box, Button } from "@mui/material";
 import Link from "@mui/material/Link";
-import aks from "../assets/images/panel2.png";
+import aks from "../../assets/images/login/panel2.png";
 
 export default function Login() {
   return (
@@ -54,7 +54,7 @@ export default function Login() {
           variant="outlined"
         />
         <Link
-          href="admin"
+          href="admin/orders"
           sx={{
             margin: "3%",
             width: "30%",
@@ -66,6 +66,7 @@ export default function Login() {
             fontSize: "20px",
             color: "#651fff",
             fontWeight: "bold",
+            paddingBottom: "5px",
           }}
         >
           ورود
