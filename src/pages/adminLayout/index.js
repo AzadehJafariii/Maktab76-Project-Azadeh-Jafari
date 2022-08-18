@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import AdminNavbar from "../Components/AdminPageShared/AdminNavbar";
+import AdminNavbar from "./adminNavbar";
 
 export default function AdminPageSharedLayout() {
   return (
