@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+<<<<<<< HEAD
 import MainPageSharedLayout from "../pages/main";
 import Categories from "../pages/main/Categories";
 <<<<<<< HEAD
@@ -14,6 +15,10 @@ import Commodities from "../pages/admin/commodities";
 import StockAndPrice from "../pages/admin/stock&price";
 import Orders from "../pages/admin/orders";
 =======
+=======
+import MainPageSharedLayout from "../pages/mainLayout";
+import Categories from "../pages/mainLayout/categories";
+>>>>>>> development
 import BabySuppliesGuide from "../pages/mainLayout/babySuppliesGuide";
 import Category from "../pages/mainLayout/category";
 import Product from "../pages/mainLayout/product";
@@ -24,12 +29,12 @@ import PaymentResult from "../pages/mainLayout/cart/paymentResult";
 import Login from "../pages/login";
 import AdminPageSharedLayout from "../pages/adminLayout";
 import Commodities from "../pages/adminLayout/commodities";
-import StockAndPrice from "../pages/adminLayout/stock&price";
+import StockAndPrice from "../pages/adminLayout/stockAndprice";
 import Orders from "../pages/adminLayout/orders";
 >>>>>>> development
 import Error404 from "../pages/errors/error404";
 
-function AppRouter() {
+export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
@@ -54,7 +59,7 @@ function AppRouter() {
         <Route path="login" element={<Login />} />
 
         <Route path="admin" element={<AdminPageSharedLayout />}>
-          <Route index element={<Commodities />} />
+          <Route path="commodities" element={<Commodities />} />
           <Route path="stockAndPrice" element={<StockAndPrice />} />
           <Route path="orders" element={<Orders />} />
         </Route>
@@ -63,5 +68,3 @@ function AppRouter() {
     </BrowserRouter>
   );
 }
-
-export default AppRouter;
