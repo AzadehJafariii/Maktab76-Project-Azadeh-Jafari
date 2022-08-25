@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-
-export default function AdminNavbar() {
-  return (
-    <div>
-      <h2>پنل مدیریت فروشگاه</h2>
-      <div>
-        <button>کالاها</button>
-        <button>موجودی و قیمت</button>
-        <button>سفارش ها</button>
-      </div>
-    </div>
-=======
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Link from "@mui/material/Link";
@@ -31,17 +17,19 @@ export default function AdminNavbar() {
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Box>
-            <Typography
-              variant="h4"
-              sx={{
-                fontFamily: "Titr",
-                fontSize: "25px",
-                fontWeight: "bold",
-                color: "#81d4fa",
-              }}
-            >
-              پنل مدیریت فروشگاه
-            </Typography>
+            <Link href="/" underline="none">
+              <Typography
+                variant="h4"
+                sx={{
+                  fontFamily: "Titr",
+                  fontSize: "25px",
+                  fontWeight: "bold",
+                  color: "#81d4fa",
+                }}
+              >
+                پنل مدیریت فروشگاه
+              </Typography>
+            </Link>
           </Box>
           <Box sx={{ display: "flex", gap: "20px", alignItems: "center" }}>
             <Link
@@ -127,6 +115,5 @@ export default function AdminNavbar() {
         </Toolbar>
       </AppBar>
     </Box>
->>>>>>> development
   );
 }

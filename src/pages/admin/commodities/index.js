@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-
-export default function Commodities() {
-  return <div>کالاها</div>;
-=======
 import * as React from "react";
 import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -22,7 +16,7 @@ export default function Commodities() {
   const productsList = useSelector((state) => state.products.productsList);
   useEffect(() => {
     dispatch(fetchProducts(params));
-  }, []);
+  }, [params]);
   return (
     <Box>
       <Box sx={{ display: "flex", gap: "78%" }}>
@@ -118,5 +112,4 @@ export default function Commodities() {
       </Box>
     </Box>
   );
->>>>>>> development
 }

@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-
-export default function Footer() {
-  return <div></div>;
-=======
 import * as React from "react";
 import { Box, Typography, Link } from "@mui/material";
 import aks1 from "../../../assets/images/footer/footer.jpg";
@@ -168,5 +162,4 @@ export default function Footer() {
       </Box>
     </Box>
   );
->>>>>>> development
 }

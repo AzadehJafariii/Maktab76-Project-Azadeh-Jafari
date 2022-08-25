@@ -11,7 +11,7 @@ export default function StockAndPrice() {
   const productsList = useSelector((state) => state.products.productsList);
   useEffect(() => {
     dispatch(fetchProducts(params));
-  }, []);
+  }, [params]);
   return (
     <Box>
       <Typography

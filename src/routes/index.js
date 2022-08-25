@@ -1,24 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-<<<<<<< HEAD
-import MainPageSharedLayout from "../pages/main";
-import Categories from "../pages/main/Categories";
-<<<<<<< HEAD
-import Category from "../pages/main/category";
-import Product from "../pages/main/product";
-import Cart from "../pages/main/cart";
-import FinalizeCart from "../pages/main/cart/finalizeCart";
-import PaymentGateway from "../pages/main/cart/paymentGateway";
-import PaymentResult from "../pages/main/cart/paymentResult";
-import Login from "../pages/login";
-import AdminPageSharedLayout from "../pages/admin";
-import Commodities from "../pages/admin/commodities";
-import StockAndPrice from "../pages/admin/stock&price";
-import Orders from "../pages/admin/orders";
-=======
-=======
 import MainPageSharedLayout from "../pages/mainLayout";
 import Categories from "../pages/mainLayout/categories";
->>>>>>> development
 import BabySuppliesGuide from "../pages/mainLayout/babySuppliesGuide";
 import Category from "../pages/mainLayout/category";
 import Product from "../pages/mainLayout/product";
@@ -31,7 +13,6 @@ import AdminPageSharedLayout from "../pages/adminLayout";
 import Commodities from "../pages/adminLayout/commodities";
 import StockAndPrice from "../pages/adminLayout/stockAndprice";
 import Orders from "../pages/adminLayout/orders";
->>>>>>> development
 import Error404 from "../pages/errors/error404";
 
 export default function AppRouter() {
@@ -41,10 +22,7 @@ export default function AppRouter() {
         <Route path="/" element={<MainPageSharedLayout />}>
           <Route index element={<Categories />} />
           <Route path="category/:categoryId" element={<Category />} />
-<<<<<<< HEAD
-=======
           <Route path="babySuppliesGuide" element={<BabySuppliesGuide />} />
->>>>>>> development
           <Route path="product/:productId" element={<Product />} />
           <Route path="cart" element={<Cart />} />
           <Route path="finalizeCart" element={<FinalizeCart />} />
@@ -53,8 +31,7 @@ export default function AppRouter() {
             element={<PaymentResult />}
           />
         </Route>
-
-        <Route path="PaymentGateway" element={<PaymentGateway />} />
+        <Route path="paymentGateway" element={<PaymentGateway />} />
 
         <Route path="login" element={<Login />} />
 

@@ -1,21 +1,23 @@
-import React from "react";
-<<<<<<< HEAD
-
-export default function Orders() {
-  return <div>سفارش ها</div>;
-=======
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../../../redux/features/order/orderSlice";
-import { Pagination, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import { Box } from "@mui/system";
+import OrDeliveredModal from "./orDeliveredModal";
+import {
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  Box,
+  FormControl,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+} from "@mui/material";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -25,68 +27,99 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Orders() {
   const dispatch = useDispatch();
-  const [params, setParams] = useState("");
-  const ordersList = useSelector((state) => state.orders);
-  console.log("ordersList", ordersList);
+  const [params, setParams] = useState(1);
+  const ordersList = useSelector((state) => state.orders.ordersList);
+  const [delivered, setDelivered] = useState(true);
   useEffect(() => {
-    dispatch(fetchOrders(params));
-  }, []);
+    dispatch(fetchOrders(delivered, params));
+  }, [delivered, params]);
 
   return (
-    <Box sx={{ margin: "4%" }}>
-      <Box sx={{ display: "flex", gap: "40%" }}>
+    <Box sx={{ margin: "4% 8% 4% 4%" }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: "30%",
+          width: "100%",
+          alignItems: "center",
+        }}
+      >
         <Typography
           variant="h5"
           sx={{
-            margin: "2% 5%",
+            margin: "1% 5%",
             fontFamily: "Titr",
             color: "green",
           }}
         >
           مدیریت سفارش ها
         </Typography>
-        <Box sx={{ marginTop: "2%", width: "30%" }}>
-          <TextField
-            type="radio"
-            id="html"
-            name="fav_language"
-            value="HTML"
-            sx={{ margin: "0 2%" }}
-          />
-          <label for="html">سفارش های تحویل شده</label>
-          <TextField type="radio" id="css" name="fav_language" value="CSS" />
-          <label for="css">سفارش های در انتظار ارسال</label>
-        </Box>
+        <FormControl>
+          <RadioGroup
+            row
+            aria-labelledby="demo-controlled-radio-buttons-group"
+            name="controlled-radio-buttons-group"
+            defaultValue="delivered"
+          >
+            <FormControlLabel
+              value="delivered"
+              control={<Radio />}
+              label="سفارش های تحویل شده"
+              onClick={() => setDelivered(true)}
+              sx={{ fontFamily: "Nazanin", fontSize: "16px" }}
+            />
+            <FormControlLabel
+              value="notDelivered"
+              control={<Radio />}
+              label="سفارش های در انتظار ارسال"
+              onClick={() => setDelivered(false)}
+              sx={{ fontFamily: "Nazanin", fontSize: "16px" }}
+            />
+          </RadioGroup>
+        </FormControl>
       </Box>
-      <Table
-        sx={{ minWidth: 650, margin: "3% 3%" }}
-        aria-label="customized table"
-      >
+      <Table sx={{ minWidth: 650, margin: "3%" }} aria-label="customized table">
         <TableHead>
           <TableRow>
             <TableCell
-              sx={{ border: "1px solid gray", fontFamily: "Nazanin" }}
+              sx={{
+                border: "1px solid gray",
+                fontFamily: "Nazanin",
+                fontSize: "16px",
+              }}
               align="left"
             >
               نام کاربر
             </TableCell>
             <TableCell
-              sx={{ border: "1px solid gray", fontFamily: "Nazanin" }}
+              sx={{
+                border: "1px solid gray",
+                fontFamily: "Nazanin",
+                fontSize: "16px",
+              }}
               align="center"
             >
               مجموع مبلغ
             </TableCell>
             <TableCell
-              sx={{ border: "1px solid gray", fontFamily: "Nazanin" }}
+              sx={{
+                border: "1px solid gray",
+                fontFamily: "Nazanin",
+                fontSize: "16px",
+              }}
               align="center"
             >
               زمان ثبت سفارش
             </TableCell>
             <TableCell
-              sx={{ border: "1px solid gray", fontFamily: "Nazanin" }}
+              sx={{
+                border: "1px solid gray",
+                fontFamily: "Nazanin",
+                fontSize: "16px",
+              }}
               align="center"
             >
-              وضعیت سفارش
+              بررسی سفارش
             </TableCell>
           </TableRow>
         </TableHead>
@@ -97,7 +130,7 @@ export default function Orders() {
                 <TableCell
                   component="th"
                   scope="row"
-                  sx={{ border: "1px solid gray" }}
+                  sx={{ border: "1px solid gray", fontFamily: "Nazanin" }}
                 >
                   {item.username}
                 </TableCell>
@@ -111,13 +144,7 @@ export default function Orders() {
                   {new Date(item.createdAt).toLocaleDateString("fa-IR")}
                 </TableCell>
                 <TableCell align="center" sx={{ border: "1px solid gray" }}>
-                  {item.status === "done" ? (
-                    "تحویل داده شده"
-                  ) : (
-                    <Typography color="error" variant="subtitle1">
-                      در انتظار تحویل
-                    </Typography>
-                  )}
+                  <OrDeliveredModal item={item} />
                 </TableCell>
               </StyledTableRow>
             ))}
@@ -135,5 +162,4 @@ export default function Orders() {
       </Box>
     </Box>
   );
->>>>>>> development
 }
