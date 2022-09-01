@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders } from "../../../redux/features/order/orderSlice";
+import { fetchOrders } from "redux/features/admin/order/ordersSlice";
 import { styled } from "@mui/material/styles";
 import OrDeliveredModal from "./orDeliveredModal";
 import {
@@ -66,14 +66,14 @@ export default function Orders() {
               control={<Radio />}
               label="سفارش های تحویل شده"
               onClick={() => setDelivered(true)}
-              sx={{ fontFamily: "Nazanin", fontSize: "16px" }}
+              sx={{ fontSize: "16px" }}
             />
             <FormControlLabel
               value="notDelivered"
               control={<Radio />}
               label="سفارش های در انتظار ارسال"
               onClick={() => setDelivered(false)}
-              sx={{ fontFamily: "Nazanin", fontSize: "16px" }}
+              sx={{ fontSize: "16px" }}
             />
           </RadioGroup>
         </FormControl>
@@ -84,8 +84,8 @@ export default function Orders() {
             <TableCell
               sx={{
                 border: "1px solid gray",
-                fontFamily: "Nazanin",
-                fontSize: "16px",
+
+                fontSize: "18px",
               }}
               align="left"
             >
@@ -94,8 +94,8 @@ export default function Orders() {
             <TableCell
               sx={{
                 border: "1px solid gray",
-                fontFamily: "Nazanin",
-                fontSize: "16px",
+
+                fontSize: "18px",
               }}
               align="center"
             >
@@ -104,8 +104,8 @@ export default function Orders() {
             <TableCell
               sx={{
                 border: "1px solid gray",
-                fontFamily: "Nazanin",
-                fontSize: "16px",
+
+                fontSize: "18px",
               }}
               align="center"
             >
@@ -114,8 +114,8 @@ export default function Orders() {
             <TableCell
               sx={{
                 border: "1px solid gray",
-                fontFamily: "Nazanin",
-                fontSize: "16px",
+
+                fontSize: "18px",
               }}
               align="center"
             >
@@ -130,20 +130,29 @@ export default function Orders() {
                 <TableCell
                   component="th"
                   scope="row"
-                  sx={{ border: "1px solid gray", fontFamily: "Nazanin" }}
+                  sx={{ border: "1px solid gray", fontSize: "16px" }}
                 >
                   {item.username}
                 </TableCell>
-                <TableCell align="center" sx={{ border: "1px solid gray" }}>
+                <TableCell
+                  align="center"
+                  sx={{ border: "1px solid gray", fontSize: "16px" }}
+                >
                   {item.prices &&
                     item.prices
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </TableCell>
-                <TableCell align="center" sx={{ border: "1px solid gray" }}>
+                <TableCell
+                  align="center"
+                  sx={{ border: "1px solid gray", fontSize: "16px" }}
+                >
                   {new Date(item.createdAt).toLocaleDateString("fa-IR")}
                 </TableCell>
-                <TableCell align="center" sx={{ border: "1px solid gray" }}>
+                <TableCell
+                  align="center"
+                  sx={{ border: "1px solid gray", fontSize: "16px" }}
+                >
                   <OrDeliveredModal item={item} />
                 </TableCell>
               </StyledTableRow>
