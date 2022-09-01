@@ -1,22 +1,31 @@
 import * as React from "react";
-import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../../redux/features/product/productSlice";
-import { BASE_URL } from "../../../api/constants";
-import { Box, Button, Typography } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { BASE_URL } from "config/api";
+import { fetchProducts } from "redux/features/admin/products/productsSlice";
+import { fetchCategory } from "redux/features/admin/category/categorySlice";
+import { Pagination, Box, Typography } from "@mui/material";
+import CoDeleteModal from "./coDeleteModal";
+import CoEditModal from "./coEditModal";
+import CoAddModal from "./coAddModal";
 
 export default function Commodities() {
   const dispatch = useDispatch();
   const [params, setParams] = useState("");
-  const productsList = useSelector((state) => state.products.productsList);
+  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState([]);
+  // const { products } = useSelector((state) => state.products);
+  const categoryList = useSelector((state) => state.category.categoryList);
   useEffect(() => {
-    dispatch(fetchProducts(params));
+    dispatch(fetchProducts(params))
+      .unwrap()
+      .then((res) => setProducts(res));
+
+    dispatch(fetchCategory())
+      .unwrap()
+      .then((res) => setCategory(res));
   }, [params]);
+
   return (
     <Box>
       <Box sx={{ display: "flex", gap: "78%" }}>
@@ -34,18 +43,7 @@ export default function Commodities() {
           </Typography>
         </Box>
         <Box>
-          <Button
-            sx={{
-              fontFamily: "Titr",
-              border: "1px solid green",
-              backgroundColor: "green",
-              color: "white",
-              borderRadius: "10%",
-              marginTop: "25%",
-            }}
-          >
-            افزودن کالا
-          </Button>
+          <CoAddModal categoryList={categoryList} />
         </Box>
       </Box>
       <table style={{ margin: "4% 3%", textAlign: "center" }}>
@@ -54,51 +52,41 @@ export default function Commodities() {
             <th style={{ border: "1px solid gray" }}>تصویر</th>
             <th style={{ border: "1px solid gray" }}>نام کالا</th>
             <th style={{ border: "1px solid gray" }}>دسته بندی</th>
-            <th style={{ border: "1px solid gray" }}></th>
+            <th style={{ border: "1px solid gray" }}>ویرایش</th>
+            <th style={{ border: "1px solid gray" }}>حذف</th>
           </tr>
         </thead>
         <tbody>
-          {productsList.length &&
-            productsList.map((item) => {
-              return (
-                <tr key={item.id}>
-                  <td
-                    style={{
-                      width: "20%",
-                      height: "20%",
-                      border: "1px solid gray",
-                    }}
-                  >
-                    <img
-                      src={`${BASE_URL}/files/${item.image}`}
-                      alt="mobile"
-                      style={{ width: "30%", height: "30%" }}
-                    />
-                  </td>
-                  <td style={{ border: "1px solid gray" }}>{item.name}</td>
-                  <td style={{ border: "1px solid gray" }}>{item.category}</td>
-                  <td style={{ border: "1px solid gray" }}>
-                    <Tooltip title="Edit">
-                      <IconButton>
-                        <BorderColorIcon
-                          variant="warning"
-                          className="mx-1"
-                          sx={{ color: "green", margin: "0 5%" }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton>
-                        <DeleteOutlineIcon
-                          variant="danger"
-                          sx={{ color: "red", margin: "0 5%" }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </td>
-                </tr>
-              );
-            })}
+          {products.map((item) => (
+            <tr key={item.id}>
+              <td
+                style={{
+                  width: "20%",
+                  height: "20%",
+                  border: "1px solid gray",
+                }}
+              >
+                <img
+                  src={`${BASE_URL}/files/${item.image[0]}`}
+                  alt="commodityPhoto"
+                  style={{ width: "30%", height: "30%" }}
+                />
+              </td>
+              <td style={{ border: "1px solid gray" }}>{item.name}</td>
+              <td style={{ border: "1px solid gray" }}>
+                {
+                  categoryList.find((category) => category.id === item.category)
+                    .name
+                }
+              </td>
+              <td style={{ border: "1px solid gray" }}>
+                <CoEditModal item={item} categoryList={categoryList} />
+              </td>
+              <td style={{ border: "1px solid gray" }}>
+                <CoDeleteModal item={item} setProducts={setProducts} />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <Box
