@@ -1,19 +1,13 @@
-<<<<<<< HEAD
 import * as React from "react";
-import HomeIcon from "@mui/icons-material/Home";
-export default function Categories() {
-  return (
-    <div>
-      <HomeIcon />
-      نمایش گروه ها
-    </div>
-  );
-}
-=======
 import { Box, Link, Typography } from "@mui/material";
-import aks1 from "../../../assets/images/home/sis.jpg";
-import aks2 from "../../../assets/images/home/painting.jpg";
-export default function Home() {
+import aks1 from "assets/images/home/sis.jpg";
+import aks2 from "assets/images/home/painting.jpg";
+import Travel from "./cards/travel";
+import Safety from "./cards/safety";
+import Toy from "./cards/toy";
+import Dining from "./cards/dining";
+
+export default function Categories() {
   return (
     <Box>
       <Box
@@ -21,7 +15,7 @@ export default function Home() {
           display: "flex",
           justifyContent: "center",
           border: "3px solid yellow",
-          marginTop: "1%",
+          marginTop: "3%",
         }}
       >
         <Link href="babySuppliesGuide">
@@ -34,9 +28,23 @@ export default function Home() {
         </Link>
       </Box>
       <Box>
+        <Link sx={{ textDecoration: "none" }}>
+          <Travel />
+        </Link>
+        <Link sx={{ textDecoration: "none" }}>
+          <Safety />
+        </Link>
+        <Link sx={{ textDecoration: "none" }}>
+          <Toy />
+        </Link>
+        <Link sx={{ textDecoration: "none" }}>
+          <Dining />
+        </Link>
+      </Box>
+      <Box>
         <Typography
           variant="h5"
-          sx={{ fontFamily: "Nazanin", marginLeft: "2%" }}
+          sx={{ fontFamily: "Nazanin", margin: "4% 0 0 2%" }}
         >
           عکس های ارسالی از کودکان در حال نقاشی
         </Typography>{" "}
@@ -45,15 +53,3 @@ export default function Home() {
     </Box>
   );
 }
-
-// import * as React from "react";
-// import HomeIcon from "@mui/icons-material/Home";
-// export default function Categories() {
-//   return (
-//     <div>
-//       <HomeIcon />
-//       نمایش گروه ها
-//     </div>
-//   );
-// }
->>>>>>> development
