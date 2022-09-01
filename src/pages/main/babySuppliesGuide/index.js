@@ -1,9 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-
-export default function BabySupliesGuide() {
-  return <div></div>;
-=======
 import { Box, Typography, Link } from "@mui/material";
 
 export default function BabySuppliesGuide() {
@@ -165,5 +160,4 @@ export default function BabySuppliesGuide() {
       </Link>
     </Box>
   );
->>>>>>> development
 }

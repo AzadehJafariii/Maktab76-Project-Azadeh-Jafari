@@ -1,13 +1,9 @@
 import * as React from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import rtlPlugin from "stylis-plugin-rtl";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { prefixer } from "stylis";
-
-const theme = createTheme({
-  direction: "rtl",
-});
+import { Theme } from "./Theme";
 
 // Create rtl cache
 const cacheRtl = createCache({
@@ -16,8 +12,8 @@ const cacheRtl = createCache({
 });
 export default function MaterialTheme(props) {
   return (
-    <CacheProvider value={cacheRtl}>
-      <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
-    </CacheProvider>
+    <Theme>
+      <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>
+    </Theme>
   );
 }

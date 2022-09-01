@@ -1,23 +1,29 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Link from "@mui/material/Link";
-import { Box, Toolbar, Typography } from "@mui/material";
+import { Box, Toolbar, Typography, Tooltip, IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { BiLogOutCircle } from "react-icons/bi";
 
 export default function AdminNavbar() {
+  const navigate = useNavigate();
+  function deleteItems() {
+    localStorage.clear();
+    navigate("/");
+  }
+
   return (
     <Box>
       <AppBar
         position="static"
         sx={{
           backgroundImage: `linear-gradient(#fff3e0,#fff3e0, #fff3e0 120%)`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
           padding: "20px 50px",
         }}
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Box>
-            <Link href="/" underline="none">
+            <Link href="/admin" underline="none">
               <Typography
                 variant="h4"
                 sx={{
@@ -111,6 +117,15 @@ export default function AdminNavbar() {
                 بازگشت به سایت
               </Typography>
             </Link>
+
+            <Tooltip title="Log Out">
+              <IconButton>
+                <BiLogOutCircle
+                  onClick={deleteItems}
+                  style={{ fontSize: "30px" }}
+                />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </AppBar>

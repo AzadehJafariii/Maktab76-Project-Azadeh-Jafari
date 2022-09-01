@@ -10,7 +10,7 @@ import BedroomBabyIcon from "@mui/icons-material/BedroomBaby";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import StrollerIcon from "@mui/icons-material/Stroller";
 import CribIcon from "@mui/icons-material/Crib";
-import logo from "../../../assets/images/logo/Bear.png";
+import logo from "assets/images/logo/Bear.png";
 
 export default function MainNavbar() {
   return (
@@ -19,8 +19,6 @@ export default function MainNavbar() {
         position="static"
         sx={{
           backgroundImage: `linear-gradient(#fff3e0,#fff3e0, #fff3e0 120%)`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
           padding: "5px 40px",
         }}
       >
@@ -46,7 +44,7 @@ export default function MainNavbar() {
                 variant="h4"
                 sx={{
                   fontFamily: "Ziba",
-                  fontSize: "45px",
+                  fontSize: "50px",
                   fontWeight: "bold",
                   color: "#81d4fa",
                 }}
@@ -79,50 +77,55 @@ export default function MainNavbar() {
                 sx={{
                   border: "1px solid #81d4fa",
                   borderRadius: "50%",
-                  padding: "0.5%",
+                  padding: "1%",
                   color: "#ff99bb",
                   backgroundColor: "white",
                   margin: "0 1%",
+                  fontSize: "30px",
                 }}
               />
               <BedroomBabyIcon
                 sx={{
                   border: "1px solid #81d4fa",
                   borderRadius: "50%",
-                  padding: "0.5%",
+                  padding: "1%",
                   color: "#ff99bb",
                   backgroundColor: "white",
                   margin: "0 1%",
+                  fontSize: "30px",
                 }}
               />
               <ChildCareIcon
                 sx={{
                   border: "1px solid #81d4fa",
                   borderRadius: "50%",
-                  padding: "0.5%",
+                  padding: "1%",
                   color: "#ff99bb",
                   backgroundColor: "white",
                   margin: "0 1%",
+                  fontSize: "30px",
                 }}
               />
               <StrollerIcon
                 sx={{
                   border: "1px solid #81d4fa",
                   borderRadius: "50%",
-                  padding: "0.5%",
+                  padding: "1%",
                   color: "#ff99bb",
                   backgroundColor: "white",
                   margin: "0 1%",
+                  fontSize: "30px",
                 }}
               />
               <CribIcon
                 sx={{
                   border: "1px solid #81d4fa",
                   borderRadius: "50%",
-                  padding: "0.5%",
+                  padding: "1%",
                   color: "#ff99bb",
                   backgroundColor: "white",
                   margin: "0 1%",
+                  fontSize: "30px",
                 }}
               />
             </Box>
