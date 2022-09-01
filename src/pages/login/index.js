@@ -1,14 +1,25 @@
-import React from "react";
-<<<<<<< HEAD
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "redux/features/user/usersSlice";
+import aks from "assets/images/login/panel2.png";
+import { TextField, Typography, Box, Button, Link } from "@mui/material";
 
 export default function Login() {
-  return <div>Login</div>;
-=======
-import { TextField, Typography, Box, Button } from "@mui/material";
-import Link from "@mui/material/Link";
-import aks from "../../assets/images/login/panel2.png";
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const { error, isLoggedIn } = useSelector((state) => state.users);
+  const navigate = useNavigate();
 
-export default function Login() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(login({ username, password }));
+    if (isLoggedIn) {
+      navigate("/admin/orders");
+    } else navigate("/login");
+  };
+
   return (
     <Box
       sx={{
@@ -23,7 +34,7 @@ export default function Login() {
     >
       <Box
         sx={{
-          width: "30%",
+          width: "25%",
           height: "60%",
           bgcolor: "background.paper",
           borderRadius: "5px",
@@ -46,36 +57,60 @@ export default function Login() {
         >
           ورود به پنل مدیریت فروشگاه
         </Typography>
-        <TextField
-          sx={{ margin: "3%", width: "90%" }}
-          id="outlined-basic"
-          label="نام کاربری:"
-          variant="outlined"
-        />
-        <TextField
-          sx={{ margin: "3%", width: "90%" }}
-          id="outlined-basic"
-          label="رمز عبور:"
-          variant="outlined"
-        />
-        <Link
-          href="admin/orders"
-          sx={{
-            margin: "3%",
-            width: "30%",
-            border: "1px solid #e0e0e0",
-            borderRadius: "4px",
-            textAlign: "center",
-            textDecoration: "none",
-            fontFamily: "Titr",
-            fontSize: "20px",
-            color: "#651fff",
-            fontWeight: "bold",
-            paddingBottom: "5px",
-          }}
-        >
-          ورود
-        </Link>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <Box sx={{ height: "10%", color: "red" }}>
+            {error && (
+              <Typography
+                variant="h6"
+                sx={{ fontFamily: "Nazanin", fontSize: "16px" }}
+              >
+                اطلاعات وارد شده صحیح نمیباشد
+              </Typography>
+            )}
+          </Box>
+          <Box>
+            <TextField
+              sx={{ margin: "7% 0", width: "100%" }}
+              label="نام کاربری:"
+              variant="outlined"
+              type="username"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </Box>
+          <Box>
+            <TextField
+              sx={{ margin: "7% 0", width: "100%" }}
+              label="رمز عبور:"
+              variant="outlined"
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              type="submit"
+              sx={{
+                margin: "7% 0",
+                width: "30%",
+                border: "1px solid #e0e0e0",
+                borderRadius: "4px",
+                textAlign: "center",
+                textDecoration: "none",
+                fontFamily: "Titr",
+                fontSize: "20px",
+                color: "#651fff",
+                fontWeight: "bold",
+                paddingBottom: "5px",
+              }}
+            >
+              ورود
+            </Button>
+          </Box>
+        </form>
         <Link
           href="/"
           underline="none"
@@ -92,5 +127,4 @@ export default function Login() {
       </Box>
     </Box>
   );
->>>>>>> development
 }
