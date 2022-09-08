@@ -5,16 +5,15 @@ import { BASE_URL } from "config/api";
 import { fetchProducts } from "redux/features/admin/products/productsSlice";
 import { fetchCategory } from "redux/features/admin/category/categorySlice";
 import { Pagination, Box, Typography } from "@mui/material";
-import CoDeleteModal from "./coDeleteModal";
-import CoEditModal from "./coEditModal";
-import CoAddModal from "./coAddModal";
+import CoDeleteModal from "components/admin/commodities/coDeleteModal";
+import CoEditModal from "components/admin/commodities/coEditModal";
+import CoAddModal from "components/admin/commodities/coAddModal";
 
 export default function Commodities() {
   const dispatch = useDispatch();
   const [params, setParams] = useState("");
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
-  // const { products } = useSelector((state) => state.products);
   const categoryList = useSelector((state) => state.category.categoryList);
   useEffect(() => {
     dispatch(fetchProducts(params))
@@ -24,7 +23,7 @@ export default function Commodities() {
     dispatch(fetchCategory())
       .unwrap()
       .then((res) => setCategory(res));
-  }, [params]);
+  }, [params, dispatch]);
 
   return (
     <Box>
@@ -43,7 +42,7 @@ export default function Commodities() {
           </Typography>
         </Box>
         <Box>
-          <CoAddModal categoryList={categoryList} />
+          <CoAddModal setProducts={setProducts} categoryList={categoryList} />
         </Box>
       </Box>
       <table style={{ margin: "4% 3%", textAlign: "center" }}>
@@ -67,16 +66,17 @@ export default function Commodities() {
                 }}
               >
                 <img
-                  src={`${BASE_URL}/files/${item.image[0]}`}
+                  src={`${BASE_URL}/files/${item?.image}`}
                   alt="commodityPhoto"
                   style={{ width: "30%", height: "30%" }}
                 />
               </td>
-              <td style={{ border: "1px solid gray" }}>{item.name}</td>
+              <td style={{ border: "1px solid gray" }}>{item?.name}</td>
               <td style={{ border: "1px solid gray" }}>
                 {
-                  categoryList.find((category) => category.id === item.category)
-                    .name
+                  categoryList.find(
+                    (category) => category.id === item?.category
+                  )?.name
                 }
               </td>
               <td style={{ border: "1px solid gray" }}>

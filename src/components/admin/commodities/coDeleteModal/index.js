@@ -18,7 +18,6 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   borderRadius: "10px",
-  border: "none",
   p: 4,
 };
 
