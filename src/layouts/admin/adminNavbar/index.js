@@ -1,12 +1,19 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Link from "@mui/material/Link";
-import { Box, Toolbar, Typography, Tooltip, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { BiLogOutCircle } from "react-icons/bi";
+import {
+  Link,
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
 
 export default function AdminNavbar() {
   const navigate = useNavigate();
+
   function deleteItems() {
     localStorage.clear();
     navigate("/");

@@ -1,25 +1,23 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-const PrivateRoute = React.lazy(() => import("./PrivateRoute"));
-const MainPageSharedLayout = React.lazy(() => import("layouts/main"));
-const Categories = React.lazy(() => import("pages/main/categories"));
-const BabySuppliesGuide = React.lazy(() =>
-  import("pages/main/babySuppliesGuide")
-);
-const Category = React.lazy(() => import("pages/main/category"));
-const Product = React.lazy(() => import("components/product"));
-const Cart = React.lazy(() => import("pages/main/cart"));
-const FinalizeCart = React.lazy(() => import("pages/main/cart/finalizeCart"));
-const PaymentGateway = React.lazy(() =>
-  import("pages/main/cart/paymentGateway")
-);
-const PaymentResult = React.lazy(() => import("pages/main/cart/paymentResult"));
-const Login = React.lazy(() => import("pages/login"));
-const AdminPageSharedLayout = React.lazy(() => import("layouts/admin"));
-const Commodities = React.lazy(() => import("pages/admin/commodities"));
-const StockAndPrice = React.lazy(() => import("pages/admin/stockAndprice"));
-const Orders = React.lazy(() => import("pages/admin/orders"));
-const Error404 = React.lazy(() => import("pages/errors/error404"));
+import {
+  PrivateRoute,
+  MainPageSharedLayout,
+  Categories,
+  BabySuppliesGuide,
+  Category,
+  Product,
+  Cart,
+  FinalizeCart,
+  SuccessfulPayment,
+  UnsuccessfulPayment,
+  Login,
+  AdminPageSharedLayout,
+  Commodities,
+  StockAndPrice,
+  Orders,
+  Error404,
+} from "config/routes";
 
 export default function AppRouter() {
   return (
@@ -90,23 +88,22 @@ export default function AppRouter() {
             }
           />
           <Route
-            path="finalizeCart/paymentResult"
+            path="successfulPayment"
             element={
               <React.Suspense fallback={<>loading...</>}>
-                <PaymentResult />
+                <SuccessfulPayment />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path="unsuccessfulPayment"
+            element={
+              <React.Suspense fallback={<>loading...</>}>
+                <UnsuccessfulPayment />
               </React.Suspense>
             }
           />
         </Route>
-
-        <Route
-          path="paymentGateway"
-          element={
-            <React.Suspense fallback={<>loading...</>}>
-              <PaymentGateway />
-            </React.Suspense>
-          }
-        />
 
         <Route
           path="login"
@@ -131,7 +128,7 @@ export default function AppRouter() {
             path="commodities"
             element={
               <React.Suspense fallback={<>loading...</>}>
-                <Commodities />{" "}
+                <Commodities />
               </React.Suspense>
             }
           />

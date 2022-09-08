@@ -7,15 +7,15 @@ const initialState = {
 };
 
 //HEADER
-export const categoriesGet = createAsyncThunk(
-  "goods/categoriesGet",
-  async (categoryId) => {
-    const res = await axios.get(
-      `http://localhost:3002/products?category=${categoryId}&_limit=1`
-    );
-    return res.headers["x-total-count"];
-  }
-);
+// export const categoriesGet = createAsyncThunk(
+//   "goods/categoriesGet",
+//   async (categoryId) => {
+//     const res = await axios.get(
+//       `http://localhost:3002/products?category=${categoryId}&_limit=1`
+//     );
+//     return res.headers["x-total-count"];
+//   }
+// );
 
 // GET
 export const goodsGet = createAsyncThunk("goods/goodsGet", async (n) => {
@@ -31,10 +31,10 @@ export const goodsSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     // HEADER
-    builder.addCase(categoriesGet.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = "";
-    });
+    // builder.addCase(categoriesGet.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.error = "";
+    // });
 
     // GET
     builder.addCase(goodsGet.pending, (state) => {

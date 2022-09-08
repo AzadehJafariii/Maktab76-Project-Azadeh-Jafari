@@ -1,18 +1,18 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import Link from "@mui/material/Link";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import { Badge, Box, Toolbar, Typography } from "@mui/material";
 import ChildFriendlyIcon from "@mui/icons-material/ChildFriendly";
 import BedroomBabyIcon from "@mui/icons-material/BedroomBaby";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import StrollerIcon from "@mui/icons-material/Stroller";
 import CribIcon from "@mui/icons-material/Crib";
 import logo from "assets/images/logo/Bear.png";
+import { Link, AppBar, Badge, Box, Toolbar, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
 export default function MainNavbar() {
+  const { cartTotalQuantity } = useSelector((state) => state.cart);
   return (
     <Box>
       <AppBar
@@ -148,7 +148,7 @@ export default function MainNavbar() {
             </Link>
             <Link href="cart">
               <Badge
-                badgeContent={0}
+                badgeContent={cartTotalQuantity}
                 color="error"
                 showZero
                 anchorOrigin={{

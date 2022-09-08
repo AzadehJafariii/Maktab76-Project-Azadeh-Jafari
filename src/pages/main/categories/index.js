@@ -2,10 +2,10 @@ import * as React from "react";
 import { Box, Link, Typography } from "@mui/material";
 import aks1 from "assets/images/home/sis.jpg";
 import aks2 from "assets/images/home/painting.jpg";
-import Travel from "./cards/travel";
-import Safety from "./cards/safety";
-import Toy from "./cards/toy";
-import Dining from "./cards/dining";
+import Travel from "components/main/cards/travel";
+import Safety from "components/main/cards/safety";
+import Toy from "components/main/cards/toy";
+import Dining from "components/main/cards/dining";
 
 export default function Categories() {
   return (

@@ -1,6 +1,6 @@
 export const BASE_URL = "http://localhost:3002";
 
-// post
+// products
 export const PRODUCTS_URL = "/products";
 
 // users

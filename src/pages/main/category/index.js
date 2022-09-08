@@ -5,16 +5,16 @@ import { useParams } from "react-router-dom";
 import { BASE_URL } from "config/api";
 import { eachGoodsGet } from "redux/features/main/eachCategory/eachCategorySlice";
 import { eachCategoriesGet } from "redux/features/main/eachCategory/eachCategorySlice";
-import Sidebar from "./sidebar";
-
-// MATERIAL UI
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { Grid, Paper } from "@mui/material";
-import { Box } from "@mui/material";
+import Sidebar from "components/main/sidebar";
 import { Link } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Paper,
+  Typography,
+  Box,
+} from "@mui/material";
 
 export default function Category() {
   const [eachCategory, setEachCategory] = useState([]);
@@ -26,7 +26,7 @@ export default function Category() {
     dispatch(eachGoodsGet(categoriesId))
       .unwrap()
       .then((res) => setEachCategory(res));
-  }, [categoriesId]);
+  }, [categoriesId, dispatch]);
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar />

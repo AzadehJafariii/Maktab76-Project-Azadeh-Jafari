@@ -4,6 +4,7 @@ import {
   deleteProductRequest,
   fetchAllProductsRequest,
   updateProductRequest,
+  updateOrderRequest,
 } from "api/products";
 
 const initialState = {
@@ -19,7 +20,12 @@ export const fetchProducts = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  (id, selectedProduct) => updateProductRequest(id, selectedProduct)
+  (bodyProduct) => updateProductRequest(bodyProduct)
+);
+
+export const updateOrder = createAsyncThunk(
+  "products/updateOrder",
+  (bodyOrder) => updateOrderRequest(bodyOrder)
 );
 
 export const createProduct = createAsyncThunk(
@@ -54,6 +60,16 @@ export const productsSlice = createSlice({
     });
     builder.addCase(updateProduct.rejected, (state, action) => {
       return { products: [], loading: false, error: action.payload };
+    });
+    // update order
+    builder.addCase(updateOrder.pending, (state) => {
+      return { ...state, loading: true };
+    });
+    builder.addCase(updateOrder.fulfilled, (state, action) => {
+      return { ...state, loading: false };
+    });
+    builder.addCase(updateOrder.rejected, (state, action) => {
+      return { loading: false, error: action.payload };
     });
     // create product
     builder.addCase(createProduct.pending, (state) => {

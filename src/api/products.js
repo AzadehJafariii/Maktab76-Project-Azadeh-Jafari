@@ -7,28 +7,26 @@ export const fetchAllProductsRequest = async (number = 1) => {
       `${PRODUCTS_URL}?_page=${number}&_limit=5`
     );
     return response.data;
-    // Promise.all
-    // const response = await Promise.all(
-    //   [POSTS, "/cities"].map((endpoint) => axios.get(endpoint))
-    // );
-    // const [{ data: posts }, { data: cities }] = response;
-    //Abort Controller
-    // const controller = new AbortController();
-    // const response = await axios.get(`${POSTS}`, {
-    //   signal: controller.signal,
-    // });
-    // return response.data;
   } catch (error) {
     return Promise.reject(error);
   }
 };
 
-export const updateProductRequest = async (id, selectedProduct) => {
+export const updateProductRequest = async ({ currentId, updatedProduct }) => {
+  console.log("updatedProduct", updatedProduct);
   try {
-    const response = await axiosPrivate.put(
-      `${PRODUCTS_URL}/${id}`,
-      selectedProduct
+    const response = await axiosPrivate.patch(
+      `${PRODUCTS_URL}/${currentId}`,
+      updatedProduct
     );
+    return response.data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+export const updateOrderRequest = async ({ id, data }) => {
+  try {
+    const response = await axiosPrivate.patch(`orders/${id}`, data);
     return response.data;
   } catch (error) {
     return Promise.reject(error);
