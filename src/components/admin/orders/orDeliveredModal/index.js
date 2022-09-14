@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { updateOrder } from "redux/features/admin/products/productsSlice";
+import { fetchOrders } from "redux/features/admin/order/ordersSlice";
 import {
   Modal,
   Box,
@@ -31,14 +32,23 @@ export default function OrDeliveredModal({ item }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [params, setParams] = useState(1);
+  const [delivered, setDelivered] = useState(true);
   const dispatch = useDispatch();
 
   const handleClick = useCallback(
     (id) => {
       const data = { delivered: true };
-      dispatch(updateOrder({ id, data }));
+      dispatch(updateOrder({ id, data }))
+        .unwrap()
+        .then((res) => setDelivered(true));
+      dispatch(fetchOrders(delivered, params))
+        .unwrap()
+        .then((res) => {
+          setOpen(false);
+        });
     },
-    [dispatch]
+    [delivered, params, dispatch]
   );
 
   return (

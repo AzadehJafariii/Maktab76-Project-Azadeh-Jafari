@@ -109,25 +109,25 @@ export default function Footer() {
               marginTop: "4%",
             }}
           >
-            <Link href="#">
+            <Link href="/#">
               {" "}
               <InstagramIcon
                 sx={{ fontSize: "35px", color: "#81d4fa", margin: "0 4%" }}
               />
             </Link>
-            <Link href="#">
+            <Link href="/#">
               {" "}
               <LinkedInIcon
                 sx={{ fontSize: "35px", color: "#81d4fa", margin: "0 4%" }}
               />
             </Link>
-            <Link href="#">
+            <Link href="/#">
               {" "}
               <TelegramIcon
                 sx={{ fontSize: "35px", color: "#81d4fa", margin: "0 4%" }}
               />
             </Link>
-            <Link href="#">
+            <Link href="/#">
               {" "}
               <WhatsAppIcon
                 sx={{ fontSize: "35px", color: "#81d4fa", margin: "0 4%" }}

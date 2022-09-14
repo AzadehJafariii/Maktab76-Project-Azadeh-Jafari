@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const initialState = {
   cartItems: localStorage.getItem("cartItems")
@@ -6,6 +8,7 @@ const initialState = {
     : [],
   cartTotalQuantity: 0,
   cartTotalAmount: 0,
+  number: 0,
 };
 
 const cartSlice = createSlice({
@@ -19,20 +22,21 @@ const cartSlice = createSlice({
       if (existingIndex >= 0) {
         state.cartItems[existingIndex] = {
           ...state.cartItems[existingIndex],
-          cartQuantity: state.cartItems[existingIndex].cartQuantity + 1,
+          count: action.payload.count,
         };
-        // toast.info("Increased product quantity", {
-        //   position: "bottom-left",
-        // }
-        // );
+        toast.info("تعداد محصول با موفقیت افزایش یافت", {
+          position: "bottom-right",
+        });
       } else {
-        let tempProductItem = { ...action.payload, cartQuantity: 1 };
+        let tempProductItem = { ...action.payload };
         state.cartItems.push(tempProductItem);
-        // toast.success("Product added to cart", {
-        //   position: "bottom-left",
-        // });
+        toast.success("افزودن کالا با موفقیت انجام شد", {
+          position: "bottom-right",
+        });
       }
+      state.number = action.payload.count;
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+      localStorage.setItem("number", JSON.stringify(state.number));
     },
     decreaseCart(state, action) {
       const itemIndex = state.cartItems.findIndex(
@@ -40,27 +44,26 @@ const cartSlice = createSlice({
       );
       if (state.cartItems[itemIndex].cartQuantity > 1) {
         state.cartItems[itemIndex].cartQuantity -= 1;
-        // toast.info("Decreased product quantity", {
-        //   position: "bottom-left",
-        // });
+        toast.info("تعداد محصول با موفقیت کاهش یافت", {
+          position: "bottom-right",
+        });
       } else if (state.cartItems[itemIndex].cartQuantity === 1) {
         const nextCartItems = state.cartItems.filter(
           (item) => item.id !== action.payload.id
         );
         state.cartItems = nextCartItems;
-        // toast.error("Product removed from cart", {
-        //   position: "bottom-left",
-        // });
+        toast.error("محصول از سبد خرید حذف شد", {
+          position: "bottom-right",
+        });
       }
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
     getTotals(state, action) {
-      let { total, quantity } = state.cartItems.reduce(
+      let { total } = state.cartItems.reduce(
         (cartTotal, cartItem) => {
-          const { price, cartQuantity } = cartItem;
-          const itemTotal = price * cartQuantity;
+          const { price, count } = cartItem;
+          const itemTotal = price * count;
           cartTotal.total += itemTotal;
-          cartTotal.quantity += cartQuantity;
           return cartTotal;
         },
         {
@@ -69,8 +72,11 @@ const cartSlice = createSlice({
         }
       );
       total = parseFloat(total.toFixed(2));
-      state.cartTotalQuantity = quantity;
       state.cartTotalAmount = total;
+      localStorage.setItem(
+        "cartTotalAmount",
+        JSON.stringify(state.cartTotalAmount)
+      );
     },
     removeFromCart(state, action) {
       state.cartItems.map((cartItem) => {
@@ -79,9 +85,9 @@ const cartSlice = createSlice({
             (item) => item.id !== cartItem.id
           );
           state.cartItems = nextCartItems;
-          // toast.error("Product removed from cart", {
-          //   position: "bottom-left",
-          // });
+          toast.error("حذف کالا با موفقیت انجام شد", {
+            position: "bottom-right",
+          });
         }
         localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         return state;
@@ -90,7 +96,7 @@ const cartSlice = createSlice({
     clearCart(state, action) {
       state.cartItems = [];
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      // toast.error("Cart cleared", { position: "bottom-left" });
+      toast.error("سبد خرید حذف شد", { position: "bottom-right" });
     },
   },
 });

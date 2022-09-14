@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { productGet } from "redux/features/main/product/productSlice";
+import { useParams, useNavigate } from "react-router-dom";
+import { goodGet } from "redux/features/main/goods/goodsSlice";
 import { useDispatch } from "react-redux";
-import { addToCart, decreaseCart } from "redux/features/main/cart/cartSlice";
+import { addToCart } from "redux/features/main/cart/cartSlice";
 import { fetchCategory } from "redux/features/admin/category/categorySlice";
 import { BASE_URL } from "config/api";
-import { Typography, Box, Button, Link } from "@mui/material";
+import { Typography, Box, Button } from "@mui/material";
 
 export default function Product() {
   const dispatch = useDispatch();
   const { productId } = useParams();
   const [product, setProduct] = useState([]);
   const [category, setCategory] = useState([]);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(
+    JSON.parse(localStorage.getItem("number"))
+  );
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(productGet(productId))
+    dispatch(goodGet(productId))
       .unwrap()
       .then((res) => setProduct(res));
     dispatch(fetchCategory())
@@ -24,13 +27,15 @@ export default function Product() {
   }, [productId, dispatch]);
 
   const handleAddtoCart = (product) => {
-    dispatch(addToCart(product));
-    setCount((count) => count + 1);
-  };
-
-  const handleRemoveCart = (product) => {
-    dispatch(decreaseCart(product));
-    setCount((count) => count - 1);
+    const data = {
+      name: product.name,
+      thumbnail: product.thumbnail,
+      price: product.price,
+      count: count,
+      id: product.id,
+    };
+    dispatch(addToCart(data));
+    navigate("/cart");
   };
 
   return (
@@ -123,7 +128,7 @@ export default function Product() {
                   border: "1px solid lightgray",
                   height: "60%",
                 }}
-                onClick={() => handleAddtoCart(product)}
+                onClick={() => setCount((count) => count + 1)}
                 disabled={count < product.quantity ? "" : "disabled"}
               >
                 +
@@ -146,23 +151,22 @@ export default function Product() {
                   border: "1px solid lightgray",
                   height: "60%",
                 }}
-                onClick={() => handleRemoveCart(product)}
+                onClick={() => setCount((count) => count - 1)}
                 disabled={count > 0 ? "" : "disabled"}
               >
                 -
               </Button>
             </Box>
           </Box>
-          <Link
-            href="/cart"
-            underline="none"
+          <Button
             sx={{
               fontSize: "20px",
               fontWeight: "bold",
             }}
+            onClick={() => handleAddtoCart(product)}
           >
-            مشاهده سبد خرید
-          </Link>
+            افزودن به سبد خرید
+          </Button>
         </Box>
       </Box>
       <Box>

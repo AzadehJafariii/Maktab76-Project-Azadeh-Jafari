@@ -2,7 +2,6 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "redux/features/admin/order/ordersSlice";
-import { styled } from "@mui/material/styles";
 import OrDeliveredModal from "components/admin/orders/orDeliveredModal";
 import {
   Pagination,
@@ -19,20 +18,19 @@ import {
   Radio,
 } from "@mui/material";
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-}));
-
 export default function Orders() {
   const dispatch = useDispatch();
-  const [params, setParams] = useState(1);
+  const [page, setPage] = useState(1);
   const ordersList = useSelector((state) => state.orders.ordersList);
+  const { totalCount } = useSelector((state) => state.products);
   const [delivered, setDelivered] = useState(true);
   useEffect(() => {
-    dispatch(fetchOrders(delivered, params));
-  }, [delivered, params, dispatch]);
+    dispatch(fetchOrders({ delivered, page }));
+  }, [delivered, page, dispatch]);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <Box sx={{ margin: "4% 8% 4% 4%" }}>
@@ -80,12 +78,12 @@ export default function Orders() {
       </Box>
       <Table sx={{ minWidth: 650, margin: "3%" }} aria-label="customized table">
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ backgroundColor: "#e1f5fe" }}>
             <TableCell
               sx={{
                 border: "1px solid gray",
-
                 fontSize: "18px",
+                color: "#ff99bb",
               }}
               align="left"
             >
@@ -94,8 +92,18 @@ export default function Orders() {
             <TableCell
               sx={{
                 border: "1px solid gray",
-
                 fontSize: "18px",
+                color: "#ff99bb",
+              }}
+              align="left"
+            >
+              نام خانوادگی
+            </TableCell>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
               }}
               align="center"
             >
@@ -104,8 +112,8 @@ export default function Orders() {
             <TableCell
               sx={{
                 border: "1px solid gray",
-
                 fontSize: "18px",
+                color: "#ff99bb",
               }}
               align="center"
             >
@@ -114,8 +122,18 @@ export default function Orders() {
             <TableCell
               sx={{
                 border: "1px solid gray",
-
                 fontSize: "18px",
+                color: "#ff99bb",
+              }}
+              align="center"
+            >
+              وضعیت سفارش
+            </TableCell>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
               }}
               align="center"
             >
@@ -126,17 +144,24 @@ export default function Orders() {
         <TableBody>
           {ordersList.length &&
             ordersList.map((item) => (
-              <StyledTableRow key={item.id}>
+              <TableRow key={item.id}>
                 <TableCell
                   component="th"
                   scope="row"
-                  sx={{ border: "1px solid gray", fontSize: "16px" }}
+                  sx={{ border: "1px solid gray", fontSize: "18px" }}
                 >
-                  {item.username}
+                  {item.firstName}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ border: "1px solid gray", fontSize: "18px" }}
+                >
+                  {item.lastName}
                 </TableCell>
                 <TableCell
                   align="center"
-                  sx={{ border: "1px solid gray", fontSize: "16px" }}
+                  sx={{ border: "1px solid gray", fontSize: "18px" }}
                 >
                   {item.prices &&
                     item.prices
@@ -145,7 +170,7 @@ export default function Orders() {
                 </TableCell>
                 <TableCell
                   align="center"
-                  sx={{ border: "1px solid gray", fontSize: "16px" }}
+                  sx={{ border: "1px solid gray", fontSize: "18px" }}
                 >
                   {new Date(item.createdAt).toLocaleDateString("fa-IR")}
                 </TableCell>
@@ -153,9 +178,15 @@ export default function Orders() {
                   align="center"
                   sx={{ border: "1px solid gray", fontSize: "16px" }}
                 >
+                  {item.delivered === true ? "تحویل شده" : "در انتظار ارسال"}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ border: "1px solid gray", fontSize: "18px" }}
+                >
                   <OrDeliveredModal item={item} setDelivered={setDelivered} />
                 </TableCell>
-              </StyledTableRow>
+              </TableRow>
             ))}
         </TableBody>
       </Table>
@@ -164,9 +195,10 @@ export default function Orders() {
         sx={{ display: "flex", justifyContent: "center", marginBottom: "5%" }}
       >
         <Pagination
-          count={2}
+          count={Math.ceil(totalCount / 3)}
+          page={page}
           color="success"
-          onClick={(event) => setParams(event.target.textContent)}
+          onChange={handlePageChange}
         />
       </Box>
     </Box>

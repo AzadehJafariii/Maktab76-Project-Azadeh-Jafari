@@ -12,7 +12,8 @@ import { Link, AppBar, Badge, Box, Toolbar, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 
 export default function MainNavbar() {
-  const { cartTotalQuantity } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
+
   return (
     <Box>
       <AppBar
@@ -148,7 +149,7 @@ export default function MainNavbar() {
             </Link>
             <Link href="cart">
               <Badge
-                badgeContent={cartTotalQuantity}
+                badgeContent={cartItems.length}
                 color="error"
                 showZero
                 anchorOrigin={{

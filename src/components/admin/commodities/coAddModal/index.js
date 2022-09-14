@@ -26,14 +26,14 @@ const style = {
   p: 4,
 };
 
-export default function CoAddModal({ setProducts, categoryList }) {
+export default function CoAddModal({ setData, categoryList, page }) {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [color, setColor] = useState("");
   const [material, setMaterial] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState([]);
   const [thumbnail, setThumbnail] = useState("");
   const [category, setCategory] = useState(0);
   const [description, setDescription] = useState("");
@@ -81,9 +81,9 @@ export default function CoAddModal({ setProducts, categoryList }) {
         toast.success("افزودن کالا با موفقیت انجام شد", {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
-        dispatch(fetchProducts())
-          .unwrap()
-          .then((res) => setProducts(res));
+        dispatch(fetchProducts(page));
+        // .unwrap()
+        // .then((res) => setData(res));
       });
     setOpen(false);
     setName("");
@@ -147,7 +147,11 @@ export default function CoAddModal({ setProducts, categoryList }) {
                   backgroundColor: "gray",
                 }}
               >
-                <img src={src[0]} sx={{ width: "5px", height: "5px" }} />
+                <img
+                  src={src[0]}
+                  sx={{ width: "5px", height: "5px" }}
+                  alt="commodity image"
+                />
               </Box>
               <Box>
                 <Typography>نام کالا:</Typography>

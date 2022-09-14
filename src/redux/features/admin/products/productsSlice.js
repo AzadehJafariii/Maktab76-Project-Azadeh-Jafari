@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  createProductRequest,
-  deleteProductRequest,
-  fetchAllProductsRequest,
-  updateProductRequest,
-  updateOrderRequest,
-} from "api/products";
+import { PRODUCTS_URL } from "config/api";
+import axiosPrivate from "api/http";
 
 const initialState = {
   products: [],
@@ -15,26 +10,84 @@ const initialState = {
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  fetchAllProductsRequest
+  async (page) => {
+    try {
+      const res = await axiosPrivate.get(
+        `${PRODUCTS_URL}?_page=${page}&_limit=5`
+      );
+      return {
+        data: res.data,
+        headers: res.headers["x-total-count"],
+      };
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 );
 
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  (bodyProduct) => updateProductRequest(bodyProduct)
+  async ({ id, entiresData }) => {
+    try {
+      const response = await axiosPrivate.patch(
+        `${PRODUCTS_URL}/${id}`,
+        entiresData
+      );
+      return response.data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+);
+export const updateEditedProduct = createAsyncThunk(
+  "products/updateProduct",
+  async ({ currentId, selectedProduct }) => {
+    try {
+      const response = await axiosPrivate.patch(
+        `${PRODUCTS_URL}/${currentId}`,
+        selectedProduct
+      );
+      return response.data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 );
 
 export const updateOrder = createAsyncThunk(
   "products/updateOrder",
-  (bodyOrder) => updateOrderRequest(bodyOrder)
+  async ({ id, data }) => {
+    try {
+      const response = await axiosPrivate.patch(`orders/${id}`, data);
+      return response.data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 );
 
 export const createProduct = createAsyncThunk(
   "products/createProduct",
-  (newProduct) => createProductRequest(newProduct)
+  async (newProduct) => {
+    try {
+      const response = await axiosPrivate.post(`${PRODUCTS_URL}`, newProduct);
+      return response.data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 );
 
-export const deleteProduct = createAsyncThunk("producs/deleteProduct", (id) =>
-  deleteProductRequest(id)
+export const deleteProduct = createAsyncThunk(
+  "producs/deleteProduct",
+  async (id) => {
+    try {
+      const response = await axiosPrivate.delete(`${PRODUCTS_URL}/${id}`);
+      return response.data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 );
 
 export const productsSlice = createSlice({
@@ -43,13 +96,17 @@ export const productsSlice = createSlice({
   extraReducers: (builder) => {
     // fetch products
     builder.addCase(fetchProducts.pending, (state) => {
-      return { ...state, loading: true };
+      state.loading = true;
     });
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
-      return { ...state, loading: false, products: action.payload };
+      state.loading = false;
+      state.products = action.payload.data;
+      state.totalCount = action.payload.headers;
+      state.error = "";
     });
     builder.addCase(fetchProducts.rejected, (state, action) => {
-      return { products: [], loading: false, error: action.payload };
+      state.loading = false;
+      state.error = action.error.message;
     });
     // update product
     builder.addCase(updateProduct.pending, (state) => {

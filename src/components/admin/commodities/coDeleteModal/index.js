@@ -3,6 +3,7 @@ import { Box, Button, Typography, Modal } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { toast } from "react-toastify";
 import {
   deleteProduct,
   fetchProducts,
@@ -21,17 +22,21 @@ const style = {
   p: 4,
 };
 
-export default function CoDeleteModal({ item, setProducts }) {
+export default function CoDeleteModal({ item, setData, page }) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleRemove = (id) => {
-    dispatch(deleteProduct(parseInt(id)));
-    dispatch(fetchProducts())
-      .unwrap()
-      .then((res) => setProducts(res));
+    dispatch(deleteProduct(parseInt(id))).then(() => {
+      toast.success("حذف کالا با موفقیت انجام شد", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+      dispatch(fetchProducts(page));
+      // .unwrap()
+      // .then((res) => setData(res));
+    });
     setOpen(false);
   };
   return (

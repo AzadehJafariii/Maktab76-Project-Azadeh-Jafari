@@ -9,14 +9,13 @@ import {
   Product,
   Cart,
   FinalizeCart,
-  SuccessfulPayment,
-  UnsuccessfulPayment,
   Login,
   AdminPageSharedLayout,
   Commodities,
   StockAndPrice,
   Orders,
   Error404,
+  PaymentResult,
 } from "config/routes";
 
 export default function AppRouter() {
@@ -88,18 +87,10 @@ export default function AppRouter() {
             }
           />
           <Route
-            path="successfulPayment"
+            path="paymentResult"
             element={
               <React.Suspense fallback={<>loading...</>}>
-                <SuccessfulPayment />
-              </React.Suspense>
-            }
-          />
-          <Route
-            path="unsuccessfulPayment"
-            element={
-              <React.Suspense fallback={<>loading...</>}>
-                <UnsuccessfulPayment />
+                <PaymentResult />
               </React.Suspense>
             }
           />

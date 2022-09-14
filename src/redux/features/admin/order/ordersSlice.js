@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axiosPrivate from "api/http";
 import { BASE_URL } from "config/api";
 
 const initialState = {
@@ -6,34 +7,42 @@ const initialState = {
   loading: false,
   error: "",
 };
+
 export const fetchOrders = createAsyncThunk(
   "orders/fetchOrders",
-  async (delivered, number = 1) => {
-    return await fetch(
-      `${BASE_URL}/orders?delivered=${delivered}&page=${number}&limit=5`
-    )
-      .then((res) => res.json())
-      .then((data) => data)
-      .catch((error) => error.message);
+  async ({ delivered, page }) => {
+    try {
+      const res = await axiosPrivate.get(
+        `${BASE_URL}/orders?delivered=${delivered}&_page=${page}&_limit=3`
+      );
+      return {
+        data: res.data,
+        headers: res.headers["x-total-count"],
+      };
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 );
 
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
-  extraReducers: {
-    [fetchOrders.pending]: (state) => {
+  extraReducers: (builder) => {
+    // fetch products
+    builder.addCase(fetchOrders.pending, (state) => {
       state.loading = true;
-    },
-    [fetchOrders.fulfilled]: (state, action) => {
+    });
+    builder.addCase(fetchOrders.fulfilled, (state, action) => {
       state.loading = false;
-      state.ordersList = action.payload;
-    },
-
-    [fetchOrders.rejected]: (state, action) => {
+      state.ordersList = action.payload.data;
+      state.totalCount = action.payload.headers;
+      state.error = "";
+    });
+    builder.addCase(fetchOrders.rejected, (state, action) => {
       state.loading = false;
-      state.error = "wrong...";
-    },
+      state.error = action.error.message;
+    });
   },
 });
 

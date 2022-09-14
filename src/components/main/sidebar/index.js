@@ -1,27 +1,23 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Typography, Box, Paper } from "@mui/material";
 import { Link } from "react-router-dom";
-import { eachGoodsGet } from "redux/features/main/eachCategory/eachCategorySlice";
-import { eachCategoriesGet } from "redux/features/main/eachCategory/eachCategorySlice";
+import { eachCategoriesGet } from "redux/features/main/goods/goodsSlice";
 
 export default function Sidebar() {
-  const [eachCategory, setEachCategory] = useState([]);
   const dispatch = useDispatch();
-  const { categoriesId } = useParams();
+  const { categoryId } = useParams();
 
   useEffect(() => {
-    dispatch(eachCategoriesGet());
-    dispatch(eachGoodsGet(categoriesId))
-      .unwrap()
-      .then((res) => setEachCategory(res));
-  }, []);
+    dispatch(eachCategoriesGet(categoryId));
+  }, [dispatch, categoryId]);
+
   return (
     <Paper
       style={{
-        width: "50%",
+        width: "30%",
         margin: "1% 1% 0 0",
         padding: "0 4%",
         backgroundColor: "#e1f5fe",

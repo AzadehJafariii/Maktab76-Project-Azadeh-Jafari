@@ -6,6 +6,35 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+#react-paginate {
+  display: flex;
+  justify-content: center;
+}
+#react-paginate ul {
+  display: inline-block;
+  margin-left: 20px;
+  padding-left: 0;
+}
+
+#react-paginate li {
+  display: inline-block;
+  color: #000;
+  cursor: pointer;
+  border-radius: 50%;
+  margin: 5px 3px 20px 0;
+}
+
+#react-paginate li a {
+  padding: 10px 10px;
+  display: inline-block;
+  color: #000;
+  outline: none;
+}
+
+#react-paginate li.active {
+  background: rgb(17, 79, 30);
+  outline: none;
+}
 
 code {
   font-family: Titr, source-code-pro, Menlo, Monaco, Consolas, "Courier New",

@@ -1,12 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getTotals,
-  removeFromCart,
-  clearCart,
-} from "redux/features/main/cart/cartSlice";
+import { getTotals, clearCart } from "redux/features/main/cart/cartSlice";
 import { useEffect } from "react";
 import { BASE_URL } from "config/api";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CartDeleteModal from "components/main/cartDeleteModal";
 import {
   Link,
   Typography,
@@ -22,15 +18,10 @@ import {
 export default function Cart() {
   const { cartItems } = useSelector((state) => state.cart);
   const { cartTotalAmount } = useSelector((state) => state.cart);
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getTotals());
   }, [dispatch, cartItems]);
-
-  const handleRemove = (id) => {
-    dispatch(removeFromCart(id));
-  };
 
   return (
     <Box>
@@ -121,7 +112,7 @@ export default function Cart() {
                       }}
                     >
                       <img
-                        src={`${BASE_URL}/files/${product?.image[0]}`}
+                        src={`${BASE_URL}/files/${product?.thumbnail}`}
                         alt="commodityPhoto"
                         style={{ width: "100%", height: "30%" }}
                       />
@@ -150,21 +141,18 @@ export default function Cart() {
                     </TableCell>
                     <TableCell
                       sx={{ border: "1px solid gray", fontSize: "18px" }}
-                    ></TableCell>
+                    >
+                      {product.count}
+                    </TableCell>
                     <TableCell
                       sx={{ border: "1px solid gray", fontSize: "18px" }}
                     >
-                      count*price
+                      {product.price * product.count}
                     </TableCell>
                     <TableCell
                       sx={{ border: "1px solid gray", textAlign: "center" }}
                     >
-                      <Button>
-                        <DeleteOutlineIcon
-                          sx={{ color: "red" }}
-                          onClick={() => handleRemove(product.id)}
-                        />
-                      </Button>
+                      <CartDeleteModal product={product} />
                     </TableCell>
                   </TableRow>
                 ))}

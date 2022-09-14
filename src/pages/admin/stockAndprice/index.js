@@ -1,139 +1,230 @@
-import React from "react";
-import { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 import { useDispatch } from "react-redux";
 import { fetchProducts } from "redux/features/admin/products/productsSlice";
-import { updateProduct } from "redux/features/admin/products/productsSlice";
-import { Pagination, TextField, Box, Typography, Button } from "@mui/material";
+import { EditText } from "react-edit-text";
+import { axiosPrivate } from "api/http";
+import {
+  Table,
+  Box,
+  Typography,
+  Button,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
 
-export default function StockAndPrice() {
+export default function InventoryPrice() {
   const dispatch = useDispatch();
-  const [params, setParams] = useState("");
-  const initialState = [
-    { id: 1, price: 1000, quantity: 5 },
-    { id: 2, price: 2000, quantity: 6 },
-  ];
-  const [products, setProducts] = useState(initialState);
-  const [currentId, setCurrentId] = useState();
 
   useEffect(() => {
-    dispatch(fetchProducts(params))
-      .unwrap()
-      .then((res) => setProducts(res));
-  }, [params, dispatch]);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-  const handleChange = (price, quantity, id) => {
-    setCurrentId(id);
-    setProducts((current) =>
-      current.map((obj) => {
-        if (obj.id === id) {
-          return { ...obj, price: Number(price), quantity: Number(quantity) };
-        }
-        return obj;
-      })
+  const [items, setItems] = useState([]);
+  const [pageCount, setpageCount] = useState(1);
+  const [limit] = useState(5);
+  const [newPrice, setNewPrice] = useState([]);
+
+  async function getItems(page, limit) {
+    const res = await fetch(
+      `http://localhost:3002/products?_page=${page}&_limit=${limit}`
     );
+
+    let items = await res.json();
+    items = items.map((item) => ({ ...item, price: item.price }));
+    return { data: items, total: res.headers.get("x-total-count") };
+  }
+
+  useEffect(() => {
+    const calculatePages = async () => {
+      const { data, total } = await getItems(1, limit);
+      setpageCount(Math.ceil(total / limit));
+      setItems(data);
+    };
+    calculatePages();
+  }, [limit]);
+
+  const handlePageClick = async (param) => {
+    const currentPage = param.selected + 1;
+    const { data } = await getItems(currentPage, limit);
+    setItems(data);
   };
 
-  const handleSave = useCallback(() => {
-    const item = products.find((item) => item.id === currentId);
-    if (currentId) {
-      const updatedProduct = {
-        price: item.price,
-        quantity: item.quantity,
+  // price
+  const handleChange = (e, id) => {
+    const idx = items.findIndex((item) => item.id === id);
+    const newPost = [...items];
+    newPost[idx].price = e.target.value;
+    setItems(newPost);
+    const newPriceList = [...newPrice];
+    const newIdx = newPrice.findIndex((item) => item.id === id);
+    if (newIdx === -1) {
+      const newObject = {
+        id: id,
+        newValPrice: e.target.value,
+        newValQuantity: newPost[idx].quantity,
       };
-      dispatch(updateProduct({ currentId, updatedProduct }))
-        .unwrap()
-        .then(() => fetchProducts());
+      newPriceList.push(newObject);
+    } else {
+      newPriceList[newIdx].newValPrice = e.target.value;
     }
-  }, [currentId, dispatch]);
+    setNewPrice(newPriceList);
+  };
+  // Quantity
+  const handleChangeQuantity = (e, id) => {
+    const idx = items.findIndex((item) => item.id === id);
+    const newPost = [...items];
+    newPost[idx].quantity = e.target.value;
+    setItems(newPost);
+    const newQuantityList = [...newPrice];
+    const newIdx = newPrice.findIndex((item) => item.id === id);
+    if (newIdx === -1) {
+      const newObject = {
+        id: id,
+        newValPrice: newPost[idx].price,
+        newValQuantity: e.target.value,
+      };
+      newQuantityList.push(newObject);
+    } else {
+      newQuantityList[newIdx].newValQuantity = e.target.value;
+    }
+    setNewPrice(newQuantityList);
+  };
+
+  const saveEdit = (e) => {
+    console.log(newPrice);
+    newPrice.forEach((element) => {
+      try {
+        let entiresData = {
+          price: element.newValPrice,
+          quantity: element.newValQuantity,
+        };
+        axiosPrivate
+          .patch(`http://localhost:3002/products/${element.id}`, entiresData)
+          .then((res) => {});
+      } catch (error) {
+        console.log("error!");
+      }
+    });
+  };
 
   return (
-    <Box>
-      <Box sx={{ display: "flex", gap: "67%" }}>
+    <>
+      <Box sx={{ display: "flex", gap: "78%" }}>
         <Box>
           <Typography
             variant="h5"
             sx={{
               fontFamily: "Titr",
-              margin: "10% 0 0 30%",
+              margin: "20% 0 0 60%",
               width: "110%",
               color: "green",
             }}
           >
-            مدیریت موجودی و قیمت ها
+            مدیریت کالا ها
           </Typography>
         </Box>
         <Box>
           <Button
-            disabled={!currentId}
-            onClick={handleSave}
+            type="submit"
             sx={{
               border: "2px solid gray",
-              fontFamily: "Nazanin",
               fontSize: "16px",
               backgroundColor: "green",
               color: "black",
-              marginTop: "20%",
+              marginTop: "40%",
             }}
+            onClick={() => saveEdit()}
           >
             ذخیره
           </Button>
         </Box>
       </Box>
-      <Box>
-        <form>
-          <table style={{ margin: "4% 10%", textAlign: "center" }}>
-            <thead>
-              <tr>
-                <th style={{ border: "1px solid gray" }}>کالا</th>
-                <th style={{ border: "1px solid gray" }}>قیمت</th>
-                <th style={{ border: "1px solid gray" }}>موجودی</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.length &&
-                products.map((item) => {
-                  return (
-                    <tr key={item.id}>
-                      <td style={{ border: "1px solid gray", width: "80%" }}>
-                        {item.name}
-                      </td>
-
-                      <td style={{ border: "1px solid gray" }}>
-                        <TextField
-                          id="outlined-multiline-flexible"
-                          maxRows={4}
-                          value={item.price}
-                          onChange={(e) =>
-                            handleChange(e.target.value, item.quantity, item.id)
-                          }
-                        />
-                      </td>
-                      <td style={{ border: "1px solid gray" }}>
-                        <TextField
-                          id="outlined-multiline-flexible"
-                          maxRows={4}
-                          value={item.quantity}
-                          onChange={(e) =>
-                            handleChange(item.price, e.target.value, item.id)
-                          }
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </form>
-      </Box>
-      <Box
-        sx={{ display: "flex", justifyContent: "center", marginBottom: "5%" }}
-      >
-        <Pagination
-          count={8}
-          color="success"
-          onClick={(event) => setParams(event.target.textContent)}
+      <Table sx={{ width: "1000px", margin: "5% 0 0 10%" }}>
+        <TableHead>
+          <TableRow sx={{ backgroundColor: "#e1f5fe" }}>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
+              }}
+            >
+              کالا
+            </TableCell>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
+              }}
+            >
+              قیمت
+            </TableCell>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
+              }}
+            >
+              موجودی
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        {items.length > 0
+          ? items?.map((item, i) => (
+              <TableBody>
+                <TableRow key={item.id}>
+                  <TableCell
+                    sx={{ border: "1px solid gray", fontSize: "18px" }}
+                  >
+                    {item?.name}
+                  </TableCell>
+                  <TableCell
+                    sx={{ border: "1px solid gray", fontSize: "18px" }}
+                  >
+                    <EditText
+                      value={item.price}
+                      onChange={(e) => handleChange(e, item.id)}
+                    />
+                  </TableCell>
+                  <TableCell
+                    sx={{ border: "1px solid gray", fontSize: "18px" }}
+                  >
+                    <EditText
+                      value={item.quantity}
+                      onChange={(e) => handleChangeQuantity(e, item.id)}
+                    />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ))
+          : null}
+      </Table>
+      <div id="react-paginate">
+        <ReactPaginate
+          previousLabel={"<"}
+          nextLabel={">"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextClassName={"page-item"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+          activeClassName={"active"}
         />
-      </Box>
-    </Box>
+      </div>
+    </>
   );
 }

@@ -4,26 +4,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "config/api";
 import { fetchProducts } from "redux/features/admin/products/productsSlice";
 import { fetchCategory } from "redux/features/admin/category/categorySlice";
-import { Pagination, Box, Typography } from "@mui/material";
+import {
+  Pagination,
+  Box,
+  Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
+} from "@mui/material";
 import CoDeleteModal from "components/admin/commodities/coDeleteModal";
 import CoEditModal from "components/admin/commodities/coEditModal";
 import CoAddModal from "components/admin/commodities/coAddModal";
 
 export default function Commodities() {
   const dispatch = useDispatch();
-  const [params, setParams] = useState("");
-  const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState([]);
-  const categoryList = useSelector((state) => state.category.categoryList);
-  useEffect(() => {
-    dispatch(fetchProducts(params))
-      .unwrap()
-      .then((res) => setProducts(res));
+  const [data, setData] = useState();
+  const [page, setPage] = useState(1);
+  const { categoryList } = useSelector((state) => state.category);
+  const { products } = useSelector((state) => state.products);
+  const { totalCount } = useSelector((state) => state.products);
 
-    dispatch(fetchCategory())
+  useEffect(() => {
+    dispatch(fetchProducts(page))
       .unwrap()
-      .then((res) => setCategory(res));
-  }, [params, dispatch]);
+      .then((res) => {
+        setData(res);
+      });
+    dispatch(fetchCategory());
+  }, [page, dispatch]);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <Box>
@@ -42,60 +56,116 @@ export default function Commodities() {
           </Typography>
         </Box>
         <Box>
-          <CoAddModal setProducts={setProducts} categoryList={categoryList} />
+          <CoAddModal
+            setData={setData}
+            categoryList={categoryList}
+            page={page}
+          />
         </Box>
       </Box>
-      <table style={{ margin: "4% 3%", textAlign: "center" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid gray" }}>تصویر</th>
-            <th style={{ border: "1px solid gray" }}>نام کالا</th>
-            <th style={{ border: "1px solid gray" }}>دسته بندی</th>
-            <th style={{ border: "1px solid gray" }}>ویرایش</th>
-            <th style={{ border: "1px solid gray" }}>حذف</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table sx={{ width: "1000px", margin: "5% 0 0 10%" }}>
+        <TableHead>
+          <TableRow sx={{ backgroundColor: "#e1f5fe" }}>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
+              }}
+            >
+              تصویر
+            </TableCell>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
+              }}
+            >
+              نام کالا
+            </TableCell>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
+              }}
+            >
+              دسته بندی
+            </TableCell>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
+              }}
+            >
+              ویرایش
+            </TableCell>
+            <TableCell
+              sx={{
+                border: "1px solid gray",
+                fontSize: "18px",
+                color: "#ff99bb",
+              }}
+            >
+              حذف
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {products.map((item) => (
-            <tr key={item.id}>
-              <td
+            <TableRow key={item.id}>
+              <TableCell
                 style={{
                   width: "20%",
                   height: "20%",
                   border: "1px solid gray",
+                  fontSize: "18px",
                 }}
               >
                 <img
-                  src={`${BASE_URL}/files/${item?.image}`}
+                  src={`${BASE_URL}/files/${item?.thumbnail}`}
                   alt="commodityPhoto"
                   style={{ width: "30%", height: "30%" }}
                 />
-              </td>
-              <td style={{ border: "1px solid gray" }}>{item?.name}</td>
-              <td style={{ border: "1px solid gray" }}>
+              </TableCell>
+              <TableCell style={{ border: "1px solid gray", fontSize: "18px" }}>
+                {item?.name}
+              </TableCell>
+              <TableCell style={{ border: "1px solid gray", fontSize: "18px" }}>
                 {
                   categoryList.find(
                     (category) => category.id === item?.category
                   )?.name
                 }
-              </td>
-              <td style={{ border: "1px solid gray" }}>
-                <CoEditModal item={item} categoryList={categoryList} />
-              </td>
-              <td style={{ border: "1px solid gray" }}>
-                <CoDeleteModal item={item} setProducts={setProducts} />
-              </td>
-            </tr>
+              </TableCell>
+              <TableCell style={{ border: "1px solid gray", fontSize: "18px" }}>
+                <CoEditModal
+                  item={item}
+                  categoryList={categoryList}
+                  page={page}
+                />
+              </TableCell>
+              <TableCell style={{ border: "1px solid gray", fontSize: "18px" }}>
+                <CoDeleteModal item={item} setData={setData} page={page} />
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       <Box
-        sx={{ display: "flex", justifyContent: "center", marginBottom: "5%" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          margin: "3% 0",
+        }}
       >
         <Pagination
-          count={8}
+          count={Math.ceil(totalCount / 5)}
+          page={page}
           color="success"
-          onClick={(event) => setParams(event.target.textContent)}
+          onChange={handlePageChange}
         />
       </Box>
     </Box>

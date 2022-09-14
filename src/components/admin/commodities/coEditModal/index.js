@@ -5,8 +5,10 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import axiosPrivate from "api/http";
+import { BASE_URL } from "config/api";
+
 import {
-  updateProduct,
+  updateEditedProduct,
   fetchProducts,
 } from "redux/features/admin/products/productsSlice";
 import { toast } from "react-toastify";
@@ -17,27 +19,20 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 800,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  height: 650,
   display: "flex",
   flexDirection: "column",
   p: 4,
 };
 
-export default function CoEditModal({ item, categoryList }) {
+export default function CoEditModal({ item, categoryList, page }) {
   const dispatch = useDispatch();
-  // const [name, setName] = useState("");
-  // const [price, setPrice] = useState(0);
-  // const [quantity, setQuantity] = useState(0);
-  // const [color, setColor] = useState("");
-  // const [material, setMaterial] = useState("");
-  // const [category, setCategory] = useState(1);
-  // const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
+  const [image, setImage] = useState(item.image);
+  const [thumbnail, setThumbnail] = useState(item.thumbnail);
+  const [description, setDescription] = useState(item.description);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -49,6 +44,9 @@ export default function CoEditModal({ item, categoryList }) {
     category: item.category,
     color: item.color,
     material: item.material,
+    image: item.image,
+    description: description,
+    thumbnail: item.thumbnail,
   });
 
   const handleUpload = async (e) => {
@@ -67,6 +65,7 @@ export default function CoEditModal({ item, categoryList }) {
       return axiosPrivate.post("/upload", form);
     });
     const res = await Promise.all(requests);
+    setImage([res[0]?.data.filename, res[1]?.data.filename]);
     setThumbnail(res[0]?.data.filename);
   };
 
@@ -74,29 +73,29 @@ export default function CoEditModal({ item, categoryList }) {
     const { name, value } = e.target;
     setSelectedProduct({ ...selectedProduct, [name]: value });
   };
-  const { name, price, quantity, category, color, material, description } =
-    selectedProduct;
+  const { name, price, quantity, category, color, material } = selectedProduct;
 
   const handleSubmit = (e, id) => {
-    // const formData = {
-    //   name,
-    //   price,
-    //   quantity,
-    //   color,
-    //   material,
-    //   thumbnail,
-    //   description,
-    //   category,
-    // };
+    const formData = {
+      name,
+      price,
+      quantity,
+      color,
+      material,
+      thumbnail,
+      description,
+      category,
+    };
+    formData.image = image;
 
     e.preventDefault();
-    dispatch(updateProduct(id, selectedProduct))
+    dispatch(updateEditedProduct({ currentId: id, selectedProduct }))
       .unwrap()
       .then(() => {
         toast.success("ویرایش کالا با موفقیت انجام شد", {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
-        dispatch(fetchProducts());
+        dispatch(fetchProducts(page));
       });
     setOpen(false);
     setSelectedProduct("");
@@ -127,7 +126,7 @@ export default function CoEditModal({ item, categoryList }) {
                 </Box>
               </Box>
               <Box sx={{ display: "flex" }}>
-                <Typography sx={{ marginTop: "6%" }}>تصویر کالا:</Typography>
+                <Typography>تصویر کالا:</Typography>
               </Box>
               <Box>
                 <input
@@ -138,84 +137,112 @@ export default function CoEditModal({ item, categoryList }) {
                 />
               </Box>
               <Box sx={{ display: "flex", gap: "5px" }}>
-                <Avatar alt="image" src={src[0]} variant="rounded" />
-                <Avatar alt="image" src={src[1]} variant="rounded" />
-              </Box>
-              <Box>
-                <Typography>نام کالا:</Typography>
-              </Box>
-              <Box>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => handleChange(e)}
-                ></input>
-              </Box>
-              <Box>
-                <Typography>دسته بندی:</Typography>
-              </Box>
-              <Box>
-                <select
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                >
-                  {categoryList.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category?.name}
-                    </option>
-                  ))}
-                </select>
-              </Box>
-              <Box>
-                <Typography>جنس:</Typography>
-              </Box>
-              <Box>
-                <input
-                  type="text"
-                  value={material}
-                  onChange={(e) => handleChange(e)}
+                <Avatar
+                  alt="image"
+                  src={`${BASE_URL}/files/${image[0]}`}
+                  variant="rounded"
+                />
+                <Avatar
+                  alt="image"
+                  src={`${BASE_URL}/files/${image[1]}`}
+                  variant="rounded"
                 />
               </Box>
-              <Box>
-                <Typography>قیمت:</Typography>
-              </Box>
-              <Box>
-                <input
-                  type="text"
-                  value={price}
-                  onChange={(e) => handleChange(Number(e))}
-                />
-              </Box>
-              <Box>
-                <Typography>تعداد:</Typography>
-              </Box>
-              <Box>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => handleChange(Number(e))}
-                />
-              </Box>
-              <Box>
-                <Typography>رنگ:</Typography>
-              </Box>
-              <Box>
-                <input
-                  type="text"
-                  value={color}
-                  onChange={(e) => handleChange(e)}
-                />
-              </Box>
-              <Box item md={12} xs={12}>
-                <Typography>توضیحات:</Typography>
-              </Box>
-              <Box item md={12} xs={12}>
-                <CKEditor
-                  data={description}
-                  editor={ClassicEditor}
-                  onChange={(e, editor) => handleChange(editor.getData())}
-                />
+              <Box sx={{ marginTop: "2%" }}>
+                <Box sx={{ display: "flex", gap: "20%" }}>
+                  <Box>
+                    <Box>
+                      <Typography>نام کالا:</Typography>
+                    </Box>
+                    <Box>
+                      <input
+                        style={{ width: "150%" }}
+                        type="text"
+                        name="name"
+                        defaultValue={name}
+                        onChange={(e) => handleChange(e)}
+                      ></input>
+                    </Box>
+                    <Box>
+                      <Typography>دسته بندی:</Typography>
+                    </Box>
+                    <Box>
+                      <select
+                        style={{ width: "150%" }}
+                        name="category"
+                        onChange={(e) => {
+                          handleChange(e);
+                        }}
+                      >
+                        {categoryList.map((category) => (
+                          <option key={category.id} defaultValue={category.id}>
+                            {category?.name}
+                          </option>
+                        ))}
+                      </select>
+                    </Box>
+                    <Box>
+                      <Typography>جنس:</Typography>
+                    </Box>
+                    <Box>
+                      <input
+                        style={{ width: "150%" }}
+                        name="material"
+                        type="text"
+                        defaultValue={material}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </Box>
+                  </Box>
+                  <Box>
+                    <Box>
+                      <Typography>قیمت:</Typography>
+                    </Box>
+                    <Box>
+                      <input
+                        style={{ width: "150%" }}
+                        name="price"
+                        type="number"
+                        defaultValue={price}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </Box>
+                    <Box>
+                      <Typography>تعداد:</Typography>
+                    </Box>
+                    <Box>
+                      <input
+                        style={{ width: "150%" }}
+                        name="quantity"
+                        type="number"
+                        defaultValue={quantity}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </Box>
+                    <Box>
+                      <Typography>رنگ:</Typography>
+                    </Box>
+                    <Box>
+                      <input
+                        style={{ width: "150%" }}
+                        name="color"
+                        type="text"
+                        defaultValue={color}
+                        onChange={(e) => handleChange(e)}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+                <Box item md={12} xs={12}>
+                  <Typography>توضیحات:</Typography>
+                </Box>
+                <Box item md={12} xs={12}>
+                  <CKEditor
+                    data={description}
+                    editor={ClassicEditor}
+                    onChange={(e, editor) => setDescription(editor.getData())}
+                  />
+                </Box>
               </Box>
             </Box>
             <Box

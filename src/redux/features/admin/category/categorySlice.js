@@ -20,7 +20,7 @@ const categorySlice = createSlice({
   name: "category",
   initialState,
   extraReducers: {
-    // FETCH GET
+    // fetch category
     [fetchCategory.pending]: (state) => {
       state.loadings = true;
     },

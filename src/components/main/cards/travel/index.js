@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { goodsGet } from "redux/features/main/goods/goodsSlice";
-// import { categoriesGet } from "redux/features/main/goods/goodsSlice";
 import { BASE_URL } from "config/api";
 import { Link } from "react-router-dom";
 import {
@@ -18,7 +17,6 @@ export default function Travel() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(categoriesGet());
     dispatch(goodsGet(1))
       .unwrap()
       .then((res) => setData1(res));

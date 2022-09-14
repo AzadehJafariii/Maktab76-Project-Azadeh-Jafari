@@ -39,21 +39,17 @@ export const usersSlice = createSlice({
   extraReducers: (builder) => {
     // login
     builder.addCase(login.fulfilled, (state, action) => {
-      console.log("fulfilled", action);
       return { isLoggedIn: true, error: "" };
     });
     builder.addCase(login.rejected, (state, action) => {
-      console.log("rejected", action);
       return { isLoggedIn: false, error: action.error.message };
     });
 
     // refresh token
     builder.addCase(refreshToken.fulfilled, (state, action) => {
-      console.log("fulfilled", action);
       return { isLoggedIn: true, error: "" };
     });
     builder.addCase(refreshToken.rejected, (state, action) => {
-      console.log("rejected", action);
       return { isLoggedIn: false, error: action.error.message };
     });
   },

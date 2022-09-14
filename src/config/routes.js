@@ -11,11 +11,8 @@ export const Cart = React.lazy(() => import("pages/main/cart"));
 export const FinalizeCart = React.lazy(() =>
   import("pages/main/cart/finalizeCart")
 );
-export const SuccessfulPayment = React.lazy(() =>
-  import("pages/main/cart/successfulPayment")
-);
-export const UnsuccessfulPayment = React.lazy(() =>
-  import("pages/main/cart/unSuccessfulPayment")
+export const PaymentResult = React.lazy(() =>
+  import("pages/main/cart/paymentResult")
 );
 export const Login = React.lazy(() => import("pages/login"));
 export const AdminPageSharedLayout = React.lazy(() => import("layouts/admin"));
