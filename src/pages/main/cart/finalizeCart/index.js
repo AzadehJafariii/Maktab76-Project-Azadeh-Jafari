@@ -5,6 +5,7 @@ import { useState } from "react";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
+import { BASE_URL } from "config/api";
 
 export default function FinalizeCart() {
   const [props, setProps] = useState({
@@ -48,7 +49,7 @@ export default function FinalizeCart() {
     onSubmit: (values) => {
       // values.phone = values.phone.toString();
       localStorage.setItem("userData", JSON.stringify(values, null, 2));
-      window.location.assign("http://localhost:3001/paymentGateway");
+      window.location.assign(`${BASE_URL}/paymentGateway`);
     },
   });
 
