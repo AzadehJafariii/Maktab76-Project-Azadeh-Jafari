@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { BASE_URL } from "config/api";
 import axios from "axios";
 
 const initialState = {
@@ -9,9 +10,7 @@ const initialState = {
 
 // GET
 export const goodsGet = createAsyncThunk("goods/goodsGet", async (n) => {
-  const res = await axios.get(
-    `http://localhost:3002/products?category=${n}&_limit=6`
-  );
+  const res = await axios.get(`${BASE_URL}/products?category=${n}&_limit=6`);
   return res.data;
 });
 
@@ -20,7 +19,7 @@ export const eachCategoriesGet = createAsyncThunk(
   "goods/eachCategoriesGet",
   async (categoryId) => {
     const res = await axios.get(
-      `http://localhost:3002/products?category=${categoryId}&_limit=1`
+      `${BASE_URL}/products?category=${categoryId}&_limit=1`
     );
     return res.data;
   }
@@ -30,14 +29,14 @@ export const eachGoodsGet = createAsyncThunk(
   "goods/eachGoodsGet",
   async ({ categoriesId, page }) => {
     const res = await axios.get(
-      `http://localhost:3002/products?category=${categoriesId}&_page=${page}&_limit=5`
+      `${BASE_URL}/products?category=${categoriesId}&_page=${page}&_limit=5`
     );
     return { data: res.data, headers: res.headers["x-total-count"] };
   }
 );
 
 export const goodGet = createAsyncThunk("goods/goodGet", async (productId) => {
-  const res = await axios.get(`http://localhost:3002/products/${productId}`);
+  const res = await axios.get(`${BASE_URL}/products/${productId}`);
   return res.data;
 });
 

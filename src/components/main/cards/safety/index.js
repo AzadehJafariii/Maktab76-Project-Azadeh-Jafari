@@ -75,7 +75,7 @@ export default function Safety() {
                     height: "145px",
                     margin: "0 auto",
                   }}
-                  image={`${BASE_URL}/files/${item.image[0]}`}
+                  image={`${BASE_URL}/files/${item?.thumbnail}`}
                   alt={`${item.name}`}
                 />
               </Paper>
