@@ -16,6 +16,7 @@ import {
   Orders,
   Error404,
   PaymentResult,
+  PaymentGateway,
 } from "config/routes";
 
 export default function AppRouter() {
@@ -97,10 +98,18 @@ export default function AppRouter() {
         </Route>
 
         <Route
-          path="login"
+          path="https://thelittleprince.onrender.com/login"
           element={
             <React.Suspense fallback={<>loading...</>}>
               <Login />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="https://thelittleprince.onrender.com/paymentGateway"
+          element={
+            <React.Suspense fallback={<>loading...</>}>
+              <PaymentGateway />
             </React.Suspense>
           }
         />

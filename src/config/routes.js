@@ -15,6 +15,9 @@ export const PaymentResult = React.lazy(() =>
   import("pages/main/cart/paymentResult")
 );
 export const Login = React.lazy(() => import("pages/login"));
+export const PaymentGateway = React.lazy(() =>
+  import("pages/main/cart/paymentGateway")
+);
 export const AdminPageSharedLayout = React.lazy(() => import("layouts/admin"));
 export const Commodities = React.lazy(() => import("pages/admin/commodities"));
 export const StockAndPrice = React.lazy(() =>

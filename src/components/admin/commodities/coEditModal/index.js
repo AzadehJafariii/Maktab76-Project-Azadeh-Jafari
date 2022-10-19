@@ -6,6 +6,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import axiosPrivate from "api/http";
 import { BASE_URL } from "config/api";
+
 import {
   updateEditedProduct,
   fetchProducts,

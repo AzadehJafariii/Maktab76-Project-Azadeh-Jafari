@@ -75,7 +75,7 @@ export default function Dining() {
                     height: "150px",
                     margin: "0 auto",
                   }}
-                  image={`${BASE_URL}/files/${item?.thumbnail}`}
+                  image={`${BASE_URL}/files/${item.image[0]}`}
                   alt={`${item.name}`}
                 />
               </Paper>
