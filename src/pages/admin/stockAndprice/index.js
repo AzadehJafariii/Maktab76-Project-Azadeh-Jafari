@@ -3,6 +3,7 @@ import ReactPaginate from "react-paginate";
 import { useDispatch } from "react-redux";
 import { fetchProducts } from "redux/features/admin/products/productsSlice";
 import { EditText } from "react-edit-text";
+import { BASE_URL } from "config/api";
 import { axiosPrivate } from "api/http";
 import {
   Table,
@@ -29,7 +30,7 @@ export default function InventoryPrice() {
 
   async function getItems(page, limit) {
     const res = await fetch(
-      `http://localhost:3002/products?_page=${page}&_limit=${limit}`
+      `${BASE_URL}/products?_page=${page}&_limit=${limit}`
     );
 
     let items = await res.json();
@@ -52,7 +53,6 @@ export default function InventoryPrice() {
     setItems(data);
   };
 
-  // price
   const handleChange = (e, id) => {
     const idx = items.findIndex((item) => item.id === id);
     const newPost = [...items];
@@ -72,7 +72,7 @@ export default function InventoryPrice() {
     }
     setNewPrice(newPriceList);
   };
-  // Quantity
+
   const handleChangeQuantity = (e, id) => {
     const idx = items.findIndex((item) => item.id === id);
     const newPost = [...items];
@@ -94,7 +94,6 @@ export default function InventoryPrice() {
   };
 
   const saveEdit = (e) => {
-    console.log(newPrice);
     newPrice.forEach((element) => {
       try {
         let entiresData = {
@@ -102,7 +101,7 @@ export default function InventoryPrice() {
           quantity: element.newValQuantity,
         };
         axiosPrivate
-          .patch(`http://localhost:3002/products/${element.id}`, entiresData)
+          .patch(`${BASE_URL}/products/${element.id}`, entiresData)
           .then((res) => {});
       } catch (error) {
         console.log("error!");
